@@ -26,7 +26,7 @@ class CreateUserTable extends Migration
         DB::table('user')->insert([
             [
                 'username' => 'root',
-                'password' => app('hash')->make(shal('root')),
+                'password' => app('hash')->make(sha1('root')),
                 'email' => 'admin@example.com',
                 'role_id' => '1',
             ]
