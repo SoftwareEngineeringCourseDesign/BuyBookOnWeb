@@ -21,7 +21,7 @@ class CreateRoleTable extends Migration
             $table->softDeletes();
         });
 
-        DB::table('user')->insert([
+        DB::table('role')->insert([
             [
                 'name' => '站长',
                 'alias' => 'root',
