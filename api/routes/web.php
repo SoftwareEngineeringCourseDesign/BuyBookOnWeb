@@ -14,3 +14,10 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group([
+    'profix' => 'auth',
+], function () use ($router) {
+   $router->post('register', 'Auth/RegisterController@handle');
+   $router->get('login', 'Auth/LoginController@handle');
+});

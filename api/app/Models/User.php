@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
@@ -11,6 +11,8 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
+
+    protected $table = 'user';
 
     /**
      * The attributes that are mass assignable.
@@ -29,4 +31,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    public function setPasswordAttribute($password) {
+        $this->attributes['password'] = app('hash')->make($password);
+    }
+
+    public function role() {
+        return $this->belongsTo('App\Models\Role', 'role_id', 'id');
+    }
+
+    public function tokens() {
+        return $this->hasMany('App\Models\ApiToken','user_id','id');
+    }
 }
