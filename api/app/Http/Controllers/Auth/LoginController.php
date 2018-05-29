@@ -7,7 +7,7 @@ use App\Models\ApiToken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Ramsey\Uuid\uuid;
+use Ramsey\Uuid\Uuid;
 
 class LoginController extends Controller
 {
