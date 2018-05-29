@@ -19,7 +19,7 @@ class RegisterController extends Controller
 
     public function handle(Request $request) {
         $this->validate($request, [
-            'username' => 'required|string|unique:user,username',
+            'username' => 'required|string|unique:user,username|alpha_dash',
             'password' => 'required|string|regex:/^[A-Za-z0-9]{40}$/',
             'email' => 'required|string|unique:user,email'
         ]);
