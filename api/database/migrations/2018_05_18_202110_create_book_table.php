@@ -23,6 +23,7 @@ class CreateBookTable extends Migration
             $table->integer('number')->comment('评分人数')->nullable();
             $table->boolean('passed')->comment('审核')->nullable();
             $table->integer('category_id')->comment('分类')->nullable();
+            $table->string('cover')->comment('封面')->nullable();
             $table->integer('user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\User;
-use http\Env\Request;
+
 
 class RegisterController extends Controller
 {
@@ -17,14 +19,15 @@ class RegisterController extends Controller
 
     public function handle(Request $request) {
         $this->validate($request, [
-            'username' => 'require|string|unique:user,username',
-            'password' => 'require|string|regex:/^[A-Za-z0-9]{40}$/',
-            'email' => 'require|string|unique:user,email'
+            'username' => 'required|string|unique:user,username',
+            'password' => 'required|string|regex:/^[A-Za-z0-9]{40}$/',
+            'email' => 'required|string|unique:user,email'
         ]);
 
         $user = new User();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
+        $user->password = $request->input('password');
         $user->role()->associate(Role::where(['alias' => 'person'])->first());
         $user->save();
         $loginController = new LoginController();

@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\ApiToken;
 use App\Models\User;
-use http\Env\Request;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Ramsey\Uuid\uuid;
 
 class LoginController extends Controller
 {
@@ -16,9 +19,10 @@ class LoginController extends Controller
 
     public function handle(Request $request)
     {
-        $user = User::where('username', $request->input('username'))->first();
-        if ($user === null) return response(['message'=>'用户名和密码有误'],403);
-        if (!app('hash')->check($request->input('password'), $user->password)) return response(['message'=>'用户名和密码有误'],403);
+        $user = User::where('username', $request->input('username'))->
+            orWhere('email', $request->input('username'))->first();
+        if ($user === null) return response(['message'=>'用户名和密码有误'],404);
+        if (!app('hash')->check($request->input('password'), $user->password)) return response(['message'=>'用户名和密码有误'],401);
         $apiToken = new ApiToken();
         $apiToken->token = Uuid::uuid4()->toString();
         $apiToken->ip = $request->server('HTTP_X_FORWARDED_FOR', $request->server('REMOTE_ADDR', null));

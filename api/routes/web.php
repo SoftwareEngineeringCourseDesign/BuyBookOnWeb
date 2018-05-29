@@ -16,8 +16,8 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group([
-    'profix' => 'auth',
+    'prefix' => 'auth',
 ], function () use ($router) {
-   $router->post('register', 'Auth/RegisterController@handle');
-   $router->get('login', 'Auth/LoginController@handle');
+   $router->post('register', 'Auth\RegisterController@handle');
+   $router->post('login', 'Auth\LoginController@handle');
 });
