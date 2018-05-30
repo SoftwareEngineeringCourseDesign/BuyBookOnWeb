@@ -43,4 +43,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function tokens() {
         return $this->hasMany('App\Models\ApiToken','user_id','id');
     }
+
+    public function books() {
+        return $this->hasMany('App\Models\Book','user_id','id');
+    }
 }

@@ -18,6 +18,7 @@ class CreateBookTable extends Migration
             $table->string('name')->comment('名字')->nullable();
             $table->string('author')->comment('作者')->nullable();
             $table->string('publisher')->comment('出版商')->nullable();
+            $table->integer('price')->comment('价格(100倍)')->nullable();
             $table->integer('stock')->comment('库存')->nullable();
             $table->integer('score')->comment('总得分')->nullable();
             $table->integer('number')->comment('评分人数')->nullable();

@@ -18,6 +18,33 @@ $router->get('/', function () use ($router) {
 $router->group([
     'prefix' => 'auth',
 ], function () use ($router) {
-   $router->post('register', 'Auth\RegisterController@handle');
-   $router->post('login', 'Auth\LoginController@handle');
+   $router->post('register', 'Auth\RegisterController@handle'); //注册
+   $router->post('login', 'Auth\LoginController@handle'); //登陆
+});
+
+$router->group([
+    'prefix' => 'category',
+], function () use ($router) {
+    $router->get('/', 'Category\ListController@handle'); //获取分类
+});
+
+$router->group([
+    'prefix' => 'book',
+], function () use ($router) {
+   $router->get('/', 'Book\ShowController@handle'); //书籍查询
+   $router->post('/', 'Book\NewController@handle'); //上传新书
+   $router->get('/{id}', 'Book\ShowDetailController@handle'); //书籍详情
+   $router->put('/{id}', 'Book\AlterController@handle'); //修改书籍信息
+});
+
+$router->group([
+    'prefix' => 'order',
+], function () use ($router) {
+   $router->post('/', 'Order\NewController@handle'); //生成订单
+});
+
+$router->group([
+    'prefix' => 'comment',
+], function () use ($router) {
+   $router->post('/', 'Comment\NewController@handle'); //新建评论
 });
