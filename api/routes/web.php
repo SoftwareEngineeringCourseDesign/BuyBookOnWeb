@@ -46,5 +46,7 @@ $router->group([
 $router->group([
     'prefix' => 'comment',
 ], function () use ($router) {
-   $router->post('/', 'Comment\NewController@handle'); //新建评论
+    $router->get('/', 'Comment\ListController@handle'); //获取评论列表
+    $router->post('/{book_id}', 'Comment\NewController@handle'); //新建评论
+    $router->delete('/{id}', 'Comment\DeleteController@handle'); //删除评论
 });
