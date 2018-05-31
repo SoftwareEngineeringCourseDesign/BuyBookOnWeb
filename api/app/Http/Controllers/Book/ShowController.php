@@ -47,6 +47,7 @@ class ShowController extends Controller
         $books = $books->take($request->input('limit',$number));
         $books = $books->offset($request->input('offset',0));
         $books = $books->latest()->get();
+
         $response = [];
         foreach ($books as $key=>$book) {
             $user = $book->user()->first();

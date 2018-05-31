@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Request;
+use carbon\carbon;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,6 +18,12 @@ class AuthServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    private function checkIP($ip, $request_ip) {
+        if ($ip === $request_ip) return true;
+        if (substr($request_ip, 0, 8) === '192.168.') return true;
+        return false;
     }
 
     /**
