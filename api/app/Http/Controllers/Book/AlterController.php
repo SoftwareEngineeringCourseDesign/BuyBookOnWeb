@@ -24,7 +24,6 @@ class AlterController extends Controller
             'price' => 'nullable|integer',
             'stock' => 'nullable|integer',
         ]);
-
         $book = Book::where('id', $id)->first();
         if($book === null||!$book->passed) return response(['message'=>'未找到该书籍'],404);
         if($request->input('price') !== null) $book->price = $request->input('price');
@@ -33,8 +32,6 @@ class AlterController extends Controller
         if($request->input('category_id') !== null) $book->category()->associate(Category::where('id', $request->input('category_id'))->first());
         $book->passed = 0;
         $book->save();
-        return response([
-            'id' => $book->id,
-        ]);
+        return ;
     }
 }

@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
-use carbon\carbon;
+use Carbon\Carbon;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -56,12 +56,13 @@ class AuthServiceProvider extends ServiceProvider
             if ($apiToken->deleted_at) {
                 return null;
             }
-            if ($apiToken->expired_at && $apiToken->expired_at->timestamp < Carbon::now()->timestamp) {
+            $expired_at = new Carbon($apiToken->expired_at);
+            if ($apiToken->expired_at && $expired_at->timestamp < Carbon::now()->timestamp) {
                 return null;
             }
             if ($apiToken->expired_at) {
                 $thirtyMinutesAfter = Carbon::now()->addMinutes(30);
-                if ($apiToken->expired_at->timestamp < $thirtyMinutesAfter->timestamp) {
+                if ($expired_at->timestamp < $thirtyMinutesAfter->timestamp) {
                     $apiToken->expired_at = $thirtyMinutesAfter;
                     $apiToken->save();
                 }
