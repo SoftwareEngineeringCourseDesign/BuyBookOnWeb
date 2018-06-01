@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Archive;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class AuditController extends Controller

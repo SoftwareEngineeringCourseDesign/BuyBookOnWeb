@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Comment;
+namespace App\Http\Controllers\Order;
 
 use App\Http\Controllers\Controller;
-use App\Models\Book;
-use App\Models\Category;
-use App\Models\Comment;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ListController extends Controller
@@ -28,31 +27,33 @@ class ListController extends Controller
         if($request->input('user_id') !== null)
         {
             if(Auth::user()->role->alias !== 'root')
-                $comments = Auth::user()->comments()->get();
-            else $comments = Comment::where('user_id', $request->input('user_id'));
+                $orders = Auth::user()->orders()->get();
+            else $orders = Order::where('user_id', $request->input('user_id'));
         }
         else if($request->input('book_id') !== null)
-            $comments = Comment::where('book_id', $request->input('book_id'));
+            $orders = Order::where('book_id', $request->input('book_id'));
         else return response(['message'=>'请检查你的输入信息'],403);
 
-        $number = count($comments->get());
-        $comments = $comments->take($request->input('limit', $number));
-        $comments = $comments->offset($request->input('offset', 0));
-        $comments = $comments->latest()->get();
+        $number = count($orders->get());
+        $orders = $orders->take($request->input('limit', $number));
+        $orders = $orders->offset($request->input('offset', 0));
+        $orders = $orders->latest()->get();
         $response = [];
-        foreach ($comments as $key=>$comment) {
-            $book = $comment->book()->first();
-            $user = $comment->user()->first();
+        foreach ($orders as $key=>$order) {
+            $book = $order->book;
+            $user = $order->user;
             $response[] = [
-                'id' => $comment->id,
-                'content' => $comment->content,
+                'id' => $order->id,
+                'number' => $order->number,
+                'price' => $order->price,
+                'step' => $order->step,
                 'book' => [
                     'id' => $book->id,
                     'name' => $book->name,
                 ],
                 'user' => [
                     'id' => $user->id,
-                    'username' => $user->username,
+                    'name' => $user->username,
                 ]
             ];
         }

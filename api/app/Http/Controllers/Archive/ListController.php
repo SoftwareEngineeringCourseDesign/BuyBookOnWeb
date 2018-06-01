@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ArchiveBook;
 use App\Models\ArchiveSeller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ListController extends Controller
