@@ -35,7 +35,6 @@ $router->group([
     $router->post('/', 'Book\NewController@handle'); //上传新书(√)
     $router->get('/{id}', 'Book\ShowDetailController@handle'); //书籍详情(√)
     $router->put('/{id}', 'Book\AlterController@handle'); //修改书籍信息(√)
-    $router->post('/{id}', 'Book\PassController@handle'); //书籍信息审核
 });
 
 $router->group([
@@ -63,5 +62,13 @@ $router->group([
 ], function () use ($router) {
     $router->put('/{id}', 'User\AlterController@handle'); //密码修改(√)
     $router->get('/{id}', 'User\ShowController@handle'); //信息展示(√)
-    $router->post('/{id}', 'User\NewController@handle'); //书商申请
+});
+
+$router->group([
+    'prefix' => 'archive',
+], function () use ($router) {
+    $router->get('/{type}', 'Archive\ListController@handle'); //获取列表
+    $router->get('/{type}/{id}', 'Archive\DetailController@handle'); //获取详情
+    $router->put('/{type}/{id}', 'Archive\AuditController@handle'); //审核
+    $router->post('/{type}/{id}', 'Archive\NewController@handle'); //提出审核
 });
