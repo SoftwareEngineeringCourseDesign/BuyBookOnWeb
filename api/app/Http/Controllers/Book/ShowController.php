@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Book;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ShowController extends Controller
@@ -24,29 +25,48 @@ class ShowController extends Controller
             'max_price' => 'nullable|integer',
             'limit' => 'nullable|integer',
             'offset' => 'nullable|integer',
+            'order' => 'nullable|string',
+            'direction' => 'nullable|string',
+            'user_id' => 'nullable|string',
         ]);
-
-        $books = Book::where('passed', 1);
-
-        if($request->input('category_id') !== null)
-            $books = $books->where('category_id', $request->input('category_id'));
-        if($request->input('keyword') !== null){
-            $keyword = $request->input('keyword');
-            $books= $books->where(function ($query) use ($keyword){
-                $query->where('name','like','%'.$keyword.'%')
-                    ->orWhere('author','like','%'.$keyword.'%')
-                    ->orWhere('publisher','like','%'.$keyword.'%');
-            });
+        if($request->input('user_id') !== null) {
+            if(Auth::user()->role->alias !== 'root' && Auth::user()->id !== $request->input('user_id'))
+                return response(['message'=>'您没有权限'],403);
+            else $books = Book::where('user_id', $request->input('user_id'))->latest();
         }
-        if($request->input('min_price') !== null)
-            $books = $books->where('price', '>=', $request->input('min_price'));
-        if($request->input('max_price') !== null)
-            $books = $books->where('price', '<=', $request->input('max_price'));
+        else {
+            $books = Book::where('passed', 1);
+            if($request->input('category_id') !== null)
+                $books = $books->where('category_id', $request->input('category_id'));
+            if($request->input('keyword') !== null){
+                $keyword = $request->input('keyword');
+                $books= $books->where(function ($query) use ($keyword){
+                    $query->where('name','like','%'.$keyword.'%')
+                        ->orWhere('author','like','%'.$keyword.'%')
+                        ->orWhere('publisher','like','%'.$keyword.'%');
+                });
+            }
+            if($request->input('min_price') !== null)
+                $books = $books->where('price', '>=', $request->input('min_price'));
+            if($request->input('max_price') !== null)
+                $books = $books->where('price', '<=', $request->input('max_price'));
+
+            if($request->input('order') === 'random') {
+                $books = $books->inRandomOrder();
+            }
+            else if($request->input('order') === 'price') {
+                $books = $books->order('price', $request->input('direction','asc'));
+            }
+            else if($request->input('order') === 'volume') {
+                $books = $books->order('number', $request->input('direction','asc'));
+            }
+            else $books = $books->latest();
+        }
 
         $number = count($books->get());
         $books = $books->take($request->input('limit',$number));
         $books = $books->offset($request->input('offset',0));
-        $books = $books->latest()->get();
+        $books = $books->get();
 
         $response = [];
         foreach ($books as $key=>$book) {

@@ -42,11 +42,11 @@ $router->group([
 ], function () use ($router) {
     $router->get('/', 'Order\ListController@handle'); //订单列表
     $router->get('/{id}', 'Order\DetailController@handle'); //订单详情
-    $router->post('/step1', 'Order\NewController@handle'); //生成订单
-    $router->put('/{id}/step2', 'Order\Controller@handle'); //订单支付
-    $router->put('/{id}/step3', 'Order\Controller@handle'); //订单发货
-    $router->put('/{id}/step4', 'Order\Controller@handle'); //订单收货
-    $router->put('/{id}/step5', 'Order\Controller@handle'); //评分评价
+    $router->post('/new', 'Order\NewController@handle'); //生成订单
+    $router->put('/{id}/pay', 'Order\PayController@handle'); //订单支付
+    $router->put('/{id}/send', 'Order\SendController@handle'); //订单发货
+    $router->put('/{id}/receive', 'Order\ReceiveController@handle'); //订单收货
+    $router->put('/{id}/evaluate', 'Order\EvaluateController@handle'); //评分评价
 });
 
 $router->group([

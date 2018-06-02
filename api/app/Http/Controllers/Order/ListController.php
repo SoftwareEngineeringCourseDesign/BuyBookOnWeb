@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Order;
 
 use App\Http\Controllers\Controller;
+use App\Models\Book;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,8 +31,11 @@ class ListController extends Controller
                 $orders = Auth::user()->orders()->get();
             else $orders = Order::where('user_id', $request->input('user_id'));
         }
-        else if($request->input('book_id') !== null)
-            $orders = Order::where('book_id', $request->input('book_id'));
+        else if($request->input('book_id') !== null) {
+            if(Auth::user()->role->alias === 'root' || Auth::user()->id === Book::where('id', $request->input('book_id'))->user_id)
+                $orders = Order::where('book_id', $request->input('book_id'));
+            else return response(['message'=>'你没有权限'],403);
+        }
         else return response(['message'=>'请检查你的输入信息'],403);
 
         $number = count($orders->get());
