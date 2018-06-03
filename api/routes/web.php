@@ -67,8 +67,8 @@ $router->group([
 $router->group([
     'prefix' => 'archive',
 ], function () use ($router) {
-    $router->get('/{type}', 'Archive\ListController@handle'); //获取列表
-    $router->get('/{type}/{id}', 'Archive\DetailController@handle'); //获取详情
-    $router->put('/{type}/{id}', 'Archive\AuditController@handle'); //审核
-    $router->post('/{type}/{id}', 'Archive\NewController@handle'); //提出审核
+    $router->get('/{type}', 'Archive\ListController@handle'); //获取列表(√)
+    $router->get('/{type}/{id}', 'Archive\DetailController@handle'); //获取详情(√)
+    $router->put('/{type}/{id}', 'Archive\AuditController@handle'); //审核(√)
+    $router->post('/{type}/{id}', 'Archive\NewController@handle'); //新建备案(√)
 });

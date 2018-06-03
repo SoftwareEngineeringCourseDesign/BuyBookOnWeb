@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Archive;
 
 use App\Http\Controllers\Controller;
+use App\Models\ArchiveBook;
+use App\Models\ArchiveSeller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,14 +21,13 @@ class DetailController extends Controller
     {
         $user = Auth::user();
         if($user === null) return response(['message'=>'您未登录'],401);
-        if($type === 'seller') $archive = ArchiveSeller::where('id', $id);
-        else if($type === 'book') $archive = ArchiveBook::where('id', $id);
+        if($type === 'seller') $archive = ArchiveSeller::where('id', $id)->first();
+        else if($type === 'book') $archive = ArchiveBook::where('id', $id)->first();
         else return response(['message'=>'备案分类有误'],404);
         if($archive === null) return response(['message'=>'该备案不存在'],404);
 
         if($type === 'seller') {
-            $user = $archive->user;
-            if ($user->id !== $user->id && $user->role->alias !== 'root')
+            if ($user->id !== $archive->user_id && $user->role->alias !== 'root')
                 return response(['message' => '您没有权限'], 403);
             $response = [
                 'id' => $archive->id,
@@ -42,9 +43,8 @@ class DetailController extends Controller
         }
         else if($type === 'book') {
             $book = $archive->book;
-            $user = $book->user;
             $category = $book->category;
-            if ($user->id !== $user->id && $user->role->alias !== 'root')
+            if ($user->id !== $book->user_id && $user->role->alias !== 'root')
                 return response(['message' => '您没有权限'], 403);
             $response = [
                 'id' => $archive->id,

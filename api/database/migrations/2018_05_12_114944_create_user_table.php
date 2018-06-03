@@ -15,9 +15,9 @@ class CreateUserTable extends Migration
     {
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username')->comment('用户名')->nullable()->unique();
+            $table->string('username')->comment('用户名')->unique();
             $table->string('password')->comment('密码')->nullable();
-            $table->string('email')->comment('邮箱')->nullable()->unique();
+            $table->string('email')->comment('邮箱')->unique();
             $table->integer('role_id')->comment('身份')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -20,7 +20,7 @@ class ShowController extends Controller
         $now_user = Auth::user();
         if ($now_user === null) return response(['message' => '您未登录'], 401);
         $now_role = $now_user->role()->first();
-        if ($id !== $now_user->id && $now_role->alias !== 'root')
+        if ($now_user->id !== +$id  && $now_role->alias !== 'root')
             return response(['message' => '您没有查询该用户的权限'], 403);
         $user = \App\Models\User::find($id);
         if ($user === null) return response(['message' => '该用户不存在'], 404);
@@ -34,6 +34,7 @@ class ShowController extends Controller
                 'name' => $role->name,
                 'alias' => $role->alias,
             ],
+            'created_at' => $user->created_at->timestamp,
         ]);
     }
 }

@@ -39,6 +39,7 @@ class NewController extends Controller
             $archive->attachments = $request->input('attachments');
             $archive->passed = 0;
             $archive->book()->associate($book);
+            $archive->user()->associate($user);
             $archive->save();
         }
         return response([

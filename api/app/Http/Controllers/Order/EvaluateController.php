@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
-class PayController extends Controller
+class EvaluateController extends Controller
 {
 
     public function __construct()

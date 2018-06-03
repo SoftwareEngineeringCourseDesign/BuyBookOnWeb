@@ -22,19 +22,13 @@ class ListController extends Controller
         $this->validate($request, [
             'offset' => 'nullable|integer|min:0',
             'limit' => 'nullable|integer',
-            'user_id' => 'nullable|integer|min:1',
         ]);
         $user = Auth::user();
         if($user === null) return response(['message'=>'您未登录'],401);
         if($type === 'seller') $archives = ArchiveSeller::where('id', '>', 0);
         else if($type === 'book') $archives = ArchiveBook::where('id', '>', 0);
         else return response(['message'=>'备案分类有误'],404);
-
-        if($request->input('user_id') !== null) {
-            if ($user->id !== $request->input('user_id') && $user->role->alias !== 'root')
-                return response(['message' => '您没有权限'], 403);
-            else $archives = $archives->where('id', $request->input('user_id'));
-        }
+        if($user->role->alias !== 'root') $archives = $archives->where('user_id', $user->id);
         $number = count($archives->get());
         $archives = $archives->take($request->input('limit', $number));
         $archives = $archives->offset($request->input('offset', 0));

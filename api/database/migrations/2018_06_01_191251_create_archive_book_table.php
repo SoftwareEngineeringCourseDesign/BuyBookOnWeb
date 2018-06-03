@@ -16,6 +16,7 @@ class CreateArchiveBookTable extends Migration
         Schema::create('archive_book', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('book_id');
+            $table->integer('user_id');
             $table->text('attachments')->comment('附件文件名（json数组）')->nullable();
             $table->integer('passed')->comment('审核')->nullable();
             $table->timestamps();

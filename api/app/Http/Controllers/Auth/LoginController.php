@@ -19,6 +19,11 @@ class LoginController extends Controller
 
     public function handle(Request $request)
     {
+        $this->validate($request, [
+            'username' => 'required|string',
+            'password' => 'required|string|regex:/^[A-Za-z0-9]{40}$/',
+        ]);
+
         $user = User::where('username', $request->input('username'))->
             orWhere('email', $request->input('username'))->first();
         if ($user === null) return response(['message'=>'用户名和密码有误'],404);

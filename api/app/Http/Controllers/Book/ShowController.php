@@ -55,10 +55,13 @@ class ShowController extends Controller
                 $books = $books->inRandomOrder();
             }
             else if($request->input('order') === 'price') {
-                $books = $books->order('price', $request->input('direction','asc'));
+                $books = $books->orderBy('price', $request->input('direction','asc'));
             }
             else if($request->input('order') === 'volume') {
-                $books = $books->order('number', $request->input('direction','asc'));
+                $books = $books->orderBy('sell_number', $request->input('direction','asc'));
+            }
+            else if($request->input('order') === 'score') {
+                $books = $books->orderBy('score', $request->input('direction','asc'));
             }
             else $books = $books->latest();
         }
@@ -70,7 +73,8 @@ class ShowController extends Controller
 
         $response = [];
         foreach ($books as $key=>$book) {
-            $user = $book->user()->first();
+            $user = $book->user;
+            $category = $book->category;
             $response[] =[
                 'id' => $book->id,
                 'name' => $book->name,
@@ -78,11 +82,16 @@ class ShowController extends Controller
                 'publisher' => $book->publisher,
                 'price' => $book->price,
                 'score' => $book->score,
-                'number' => $book->number,
+                'sell_number' => $book->sell_number,
+                'people_number' => $book->people_number,
                 'cover' => $book->cover,
                 'user' => ($user === null) ? null : [
                     'id' => $user->id,
-                    'name' => $user->name,
+                    'name' => $user->username,
+                ],
+                'category' => ($category === null) ? null : [
+                    'id' => $category->id,
+                    'name' => $category->name,
                 ],
                 'created_at' => $book->created_at->timestamp??0,
                 'updated_at' => $book->updated_at->timestamp??$book->created_at->timestamp??0,
