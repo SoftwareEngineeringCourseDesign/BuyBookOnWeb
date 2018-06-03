@@ -58,7 +58,7 @@ class ShowController extends Controller
                 $books = $books->orderBy('price', $request->input('direction','asc'));
             }
             else if($request->input('order') === 'volume') {
-                $books = $books->orderBy('sell_number', $request->input('direction','asc'));
+                $books = $books->orderBy('number', $request->input('direction','asc'));
             }
             else if($request->input('order') === 'score') {
                 $books = $books->orderBy('score', $request->input('direction','asc'));

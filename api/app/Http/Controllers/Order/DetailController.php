@@ -30,6 +30,7 @@ class DetailController extends Controller
             'id' => $order->id,
             'number' => $order->number,
             'price' => $order->price,
+            'step' => $order->step,
             'book' => [
                 'id' => $book->id,
                 'name' => $book->name,
@@ -38,8 +39,8 @@ class DetailController extends Controller
                 'id' => $user->id,
                 'name' => $user->username,
             ],
-            'created_at' => $archive->created_at->timestamp??0,
-            'updated_at' => $archive->updated_at->timestamp??$archive->created_at->timestamp??0,
+            'created_at' => $order->created_at->timestamp??0,
+            'updated_at' => $order->updated_at->timestamp??$order->created_at->timestamp??0,
         ];
         return response($response);
     }

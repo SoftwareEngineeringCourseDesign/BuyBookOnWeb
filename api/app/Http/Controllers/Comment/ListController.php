@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Category;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ListController extends Controller
@@ -27,8 +28,10 @@ class ListController extends Controller
         ]);
         if($request->input('user_id') !== null)
         {
-            if(Auth::user()->role->alias !== 'root')
-                $comments = Auth::user()->comments()->get();
+            $user = Auth::user();
+            if($user === null) return response(['message'=>'您未登录'],401);
+            if($user->role->alias !== 'root')
+                $comments = $user->comments();
             else $comments = Comment::where('user_id', $request->input('user_id'));
         }
         else if($request->input('book_id') !== null)
@@ -53,7 +56,8 @@ class ListController extends Controller
                 'user' => [
                     'id' => $user->id,
                     'username' => $user->username,
-                ]
+                ],
+                'created_at' => $comment->created_at->timestamp,
             ];
         }
 

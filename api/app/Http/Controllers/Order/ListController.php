@@ -25,14 +25,17 @@ class ListController extends Controller
             'limit' => 'nullable|integer',
             'offset' => 'nullable|integer',
         ]);
+
+        $user = Auth::user();
+        if($user === null) return response(['message'=>'您未登录'],401);
         if($request->input('user_id') !== null)
         {
-            if(Auth::user()->role->alias !== 'root')
-                $orders = Auth::user()->orders()->get();
+            if($user->role->alias !== 'root')
+                $orders = $user->orders();
             else $orders = Order::where('user_id', $request->input('user_id'));
         }
         else if($request->input('book_id') !== null) {
-            if(Auth::user()->role->alias === 'root' || Auth::user()->id === Book::where('id', $request->input('book_id'))->user_id)
+            if($user->role->alias === 'root' || $user->id === Book::where('id', $request->input('book_id'))->first()->user_id)
                 $orders = Order::where('book_id', $request->input('book_id'));
             else return response(['message'=>'你没有权限'],403);
         }
@@ -48,8 +51,6 @@ class ListController extends Controller
             $user = $order->user;
             $response[] = [
                 'id' => $order->id,
-                'number' => $order->number,
-                'price' => $order->price,
                 'step' => $order->step,
                 'book' => [
                     'id' => $book->id,
@@ -58,7 +59,8 @@ class ListController extends Controller
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->username,
-                ]
+                ],
+                'created_at' => $order->created_at->timestamp,
             ];
         }
 

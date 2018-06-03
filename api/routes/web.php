@@ -40,21 +40,21 @@ $router->group([
 $router->group([
     'prefix' => 'order',
 ], function () use ($router) {
-    $router->get('/', 'Order\ListController@handle'); //订单列表
-    $router->get('/{id}', 'Order\DetailController@handle'); //订单详情
-    $router->post('/new', 'Order\NewController@handle'); //生成订单
-    $router->put('/{id}/pay', 'Order\PayController@handle'); //订单支付
-    $router->put('/{id}/send', 'Order\SendController@handle'); //订单发货
-    $router->put('/{id}/receive', 'Order\ReceiveController@handle'); //订单收货
-    $router->put('/{id}/evaluate', 'Order\EvaluateController@handle'); //评分评价
+    $router->get('/', 'Order\ListController@handle'); //订单列表(√)
+    $router->get('/{id}', 'Order\DetailController@handle'); //订单详情(√)
+    $router->post('/new', 'Order\NewController@handle'); //生成订单(√)
+    $router->put('/{id}/pay', 'Order\PayController@handle'); //订单支付(√)
+    $router->put('/{id}/send', 'Order\SendController@handle'); //订单发货(√)
+    $router->put('/{id}/receive', 'Order\ReceiveController@handle'); //订单收货(√)
+    $router->put('/{id}/evaluate', 'Order\EvaluateController@handle'); //评分评价(√)
 });
 
 $router->group([
     'prefix' => 'comment',
 ], function () use ($router) {
-    $router->get('/', 'Comment\ListController@handle'); //获取评论列表
-    $router->post('/{book_id}', 'Comment\NewController@handle'); //新建评论
-    $router->delete('/{id}', 'Comment\DeleteController@handle'); //删除评论
+    $router->get('/', 'Comment\ListController@handle'); //获取评论列表(√)
+    $router->post('/{order_id}', 'Comment\NewController@handle'); //新建评论(√)
+    $router->delete('/{id}', 'Comment\DeleteController@handle'); //删除评论(√)
 });
 
 $router->group([

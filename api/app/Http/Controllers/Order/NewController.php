@@ -28,7 +28,7 @@ class NewController extends Controller
         if($user === null) return response(['message'=>'您未登录'],401);
         $book = Book::where('id', $request->input('book_id'))->first();
         if($book === null) return response(['message'=>'该书籍不存在'],404);
-        if($book->price*$request->input('number') !== $request->input('price'))
+        if($book->price*$request->input('number') !== +$request->input('price'))
             return response(['message'=>'订单不合法'],403);
 
         $order = new Order();

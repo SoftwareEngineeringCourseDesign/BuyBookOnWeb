@@ -26,11 +26,14 @@ class EvaluateController extends Controller
         if ($user === null) return response(['message' => '您未登录'], 401);
         $order = Order::where('id', $id)->first();
         if ($order === null) return response(['message' => '订单不存在'], 404);
+        if($order->step !== 4) return response(['message'=>'警告，你有刷分嫌疑'],403);
         if ($user->id !== $order->user_id) return response(['message' => '你没有权限'], 403);
         $book = $order->book;
         $book->sum_score = $book->sum_score - 5 + $request->input('score');
         $book->score = $book->sum_score / $book->people_number;
         $book->save();
-        return;
+        $order->step = 5;
+        $order->save();
+        return ;
     }
 }

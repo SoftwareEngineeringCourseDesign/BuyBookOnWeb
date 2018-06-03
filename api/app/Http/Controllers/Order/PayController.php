@@ -21,6 +21,7 @@ class PayController extends Controller
     {
         $order = Order::where('id', $id)->first();
         if($order === null) return response(['message'=>'订单不存在'],404);
+        if($order->step !== 1) return response(['message'=>'订单已支付'],402);
         $order->step = 2;
         $order->save();
         return ;
