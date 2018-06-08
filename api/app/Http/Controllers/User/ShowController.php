@@ -34,7 +34,7 @@ class ShowController extends Controller
                 'name' => $role->name,
                 'alias' => $role->alias,
             ],
-            'created_at' => $user->created_at->timestamp,
+            'created_at' => $user->created_at->timestamp??0,
         ]);
     }
 }
