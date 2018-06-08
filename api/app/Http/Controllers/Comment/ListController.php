@@ -57,7 +57,7 @@ class ListController extends Controller
                     'id' => $user->id,
                     'username' => $user->username,
                 ],
-                'created_at' => $comment->created_at->timestamp,
+                'created_at' => $comment->created_at->timestamp??0,
             ];
         }
 

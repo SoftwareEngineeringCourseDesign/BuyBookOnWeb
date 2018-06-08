@@ -60,7 +60,7 @@ class ListController extends Controller
                     'id' => $user->id,
                     'name' => $user->username,
                 ],
-                'created_at' => $order->created_at->timestamp,
+                'created_at' => $order->created_at->timestamp??0,
             ];
         }
 
