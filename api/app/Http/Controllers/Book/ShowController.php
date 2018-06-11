@@ -31,7 +31,7 @@ class ShowController extends Controller
         ]);
         if($request->input('user_id') !== null) {
             if(Auth::user()->role->alias !== 'root' && Auth::user()->id !== $request->input('user_id'))
-                return response(['message'=>'您没有权限'],403);
+                return $books = Book::where('user_id', $request->input('user_id'))->where('passed', 1)->latest();
             else $books = Book::where('user_id', $request->input('user_id'))->latest();
         }
         else {
@@ -58,7 +58,7 @@ class ShowController extends Controller
                 $books = $books->orderBy('price', $request->input('direction','asc'));
             }
             else if($request->input('order') === 'volume') {
-                $books = $books->orderBy('number', $request->input('direction','asc'));
+                $books = $books->orderBy('sell_number', $request->input('direction','asc'));
             }
             else if($request->input('order') === 'score') {
                 $books = $books->orderBy('score', $request->input('direction','asc'));
