@@ -21,7 +21,7 @@ class ShowDetailController extends Controller
         if($book === null) return response(['message'=>'未找到该书籍'],404);
         $user = $book->user;
         $category = $book->category;
-        $response[] =[
+        $response =[
             'id' => $book->id,
             'name' => $book->name,
             'author' => $book->author,
@@ -30,6 +30,7 @@ class ShowDetailController extends Controller
             'score' => $book->score,
             'sell_number' => $book->sell_number,
             'people_number' => $book->people_number,
+            'introduction' => $book->introduction,
             'cover' => $book->cover,
             'passed' => $book->passed,
             'user' => ($user === null) ? null : [

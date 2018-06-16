@@ -24,6 +24,7 @@ class AlterController extends Controller
             'cover' => 'nullable|string',
             'price' => 'nullable|integer',
             'stock' => 'nullable|integer',
+            'introduction' => 'nullable|string'
         ]);
 
         $user = Auth::user();
@@ -36,6 +37,7 @@ class AlterController extends Controller
         if($request->input('price') !== null) $book->price = $request->input('price');
         if($request->input('stock') !== null) $book->stock = $request->input('stock');
         if($request->input('cover') !== null) $book->cover = $request->input('cover');
+        if($request->input('introduction') !== null) $book->introduction = $request->input('introduction');
         if($request->input('category_id') !== null) $book->category()->associate(Category::where('id', $request->input('category_id'))->first());
         $book->passed = 0;
         $book->save();

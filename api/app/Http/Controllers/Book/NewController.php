@@ -27,6 +27,7 @@ class NewController extends Controller
             'cover' => 'required|string',
             'price' => 'required|integer',
             'stock' => 'required|integer',
+            'introduction' => 'required|string'
         ]);
 
         $user = Auth::user();
@@ -41,6 +42,7 @@ class NewController extends Controller
         $book->price = $request->input('price');
         $book->stock = $request->input('stock');
         $book->cover = $request->input('cover');
+        $book->introduction = $request->input('introduction');
         $book->category()->associate(Category::where('id', $request->input('category_id'))->first());
         $book->user()->associate($user);
         $book->save();
