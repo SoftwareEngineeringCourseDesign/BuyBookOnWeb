@@ -24,6 +24,7 @@ class ListController extends Controller
             'book_id' => 'nullable|integer',
             'limit' => 'nullable|integer',
             'offset' => 'nullable|integer',
+            'step' => 'nullable|integer',
         ]);
 
         $user = Auth::user();
@@ -40,7 +41,7 @@ class ListController extends Controller
             else return response(['message'=>'你没有权限'],403);
         }
         else return response(['message'=>'请检查你的输入信息'],403);
-
+        if ($request->input('step', null) !== null) $orders = $orders->where('step', $request->input('step'));
         $number = count($orders->get());
         $orders = $orders->take($request->input('limit', $number));
         $orders = $orders->offset($request->input('offset', 0));
