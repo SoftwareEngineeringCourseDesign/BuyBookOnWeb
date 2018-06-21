@@ -54,8 +54,9 @@ class ListController extends Controller
                 'step' => $order->step,
                 'book' => [
                     'id' => $book->id,
-                    'name' => $book->name,
                 ],
+                'sum' => $order->price,
+                'number' => $order->number,
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->username,
