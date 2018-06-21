@@ -27,7 +27,7 @@ class ReceiveController extends Controller
         if($user->id !== $order->user_id) return response(['message'=>'你没有权限'],403);
         $book = $order->book;
         $book->people_number++;
-        $book->sum_score = $book->sum_score+5;
+        $book->sum_score = $book->sum_score+10;
         $book->score = $book->sum_score/$book->people_number;
         $book->sell_number = $book->sell_number + $order->number;
         $book->save();
