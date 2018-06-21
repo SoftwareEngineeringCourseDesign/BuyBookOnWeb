@@ -29,7 +29,7 @@ class EvaluateController extends Controller
         if($order->step !== 4) return response(['message'=>'警告，你有刷分嫌疑'],403);
         if ($user->id !== $order->user_id) return response(['message' => '你没有权限'], 403);
         $book = $order->book;
-        $book->sum_score = $book->sum_score - 5 + $request->input('score');
+        $book->sum_score = $book->sum_score - 10 + $request->input('score');
         $book->score = $book->sum_score / $book->people_number;
         $book->save();
         $order->step = 5;
