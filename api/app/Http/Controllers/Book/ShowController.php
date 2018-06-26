@@ -28,11 +28,16 @@ class ShowController extends Controller
             'order' => 'nullable|string',
             'direction' => 'nullable|string',
             'user_id' => 'nullable|string',
+            'passed' => 'nullable|integer',
         ]);
         if($request->input('user_id') !== null) {
             if(Auth::user()->role->alias !== 'root' && Auth::user()->id !== $request->input('user_id'))
                 $books = Book::where('user_id', $request->input('user_id'))->where('passed', 1)->latest();
-            else $books = Book::where('user_id', $request->input('user_id'))->latest();
+            else {
+                $books = Book::where('user_id', $request->input('user_id'))->latest();
+                if ($request->input('passed', null) !== null) $books = $books->where('passed', +$request->input('passed'));
+                if ($request->input('category_id', null) !== null) $books = $books->where('passed', +$request->input('category_id'));
+            }
         }
         else {
             $books = Book::where('passed', 1);
