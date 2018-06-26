@@ -31,7 +31,7 @@ class ShowController extends Controller
         ]);
         if($request->input('user_id') !== null) {
             if(Auth::user()->role->alias !== 'root' && Auth::user()->id !== $request->input('user_id'))
-                return $books = Book::where('user_id', $request->input('user_id'))->where('passed', 1)->latest();
+                $books = Book::where('user_id', $request->input('user_id'))->where('passed', 1)->latest();
             else $books = Book::where('user_id', $request->input('user_id'))->latest();
         }
         else {
