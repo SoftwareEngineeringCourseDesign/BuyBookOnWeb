@@ -35,6 +35,7 @@ class ShowController extends Controller
                 'alias' => $role->alias,
             ],
             'created_at' => $user->created_at->timestamp??0,
+            'money' => $user->money,
         ]);
     }
 }
