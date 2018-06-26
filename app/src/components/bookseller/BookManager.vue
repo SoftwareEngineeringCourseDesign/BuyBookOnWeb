@@ -227,7 +227,8 @@ export default {
             book.name = r.data[key].name
             book.author = r.data[key].author
             book.createTime = moment.unix(+r.data[key].created_at).format('YYYY-MM-DD')
-            book.updateTime = moment.unix(+r.data[key].updated_at).format('YYYY-MM-DD')
+            if (r.data[key].passed === 1) book.updateTime = moment.unix(+r.data[key].updated_at).format('YYYY-MM-DD')
+            else book.updateTime = '-'
             book.price = this.toDecimal2(r.data[key].price / 100)
             book.introduction = r.data[key].introduction
             book.publisher = r.data[key].publisher
