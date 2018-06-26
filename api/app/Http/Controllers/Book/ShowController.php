@@ -31,7 +31,7 @@ class ShowController extends Controller
             'passed' => 'nullable|integer',
         ]);
         if($request->input('user_id') !== null) {
-            if(Auth::user()->role->alias !== 'root' && Auth::user()->id !== $request->input('user_id'))
+            if(Auth::user()->role->alias !== 'root' && Auth::user()->id !== +$request->input('user_id'))
                 $books = Book::where('user_id', $request->input('user_id'))->where('passed', 1)->latest();
             else {
                 $books = Book::where('user_id', $request->input('user_id'))->latest();
