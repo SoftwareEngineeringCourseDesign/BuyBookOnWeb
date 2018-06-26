@@ -101,7 +101,7 @@ class ShowController extends Controller
                 'created_at' => $book->created_at->timestamp??0,
                 'updated_at' => $book->updated_at->timestamp??$book->created_at->timestamp??0,
                 'passed' => $book->passed,
-                'intruduction' => $book->introduction,
+                'introduction' => $book->introduction,
             ];
         }
         return response($response)->header('X-Total', $number);
