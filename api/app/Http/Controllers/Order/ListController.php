@@ -25,6 +25,7 @@ class ListController extends Controller
             'limit' => 'nullable|integer',
             'offset' => 'nullable|integer',
             'step' => 'nullable|integer',
+            'bookseller' => 'nullable|boolean',
         ]);
 
         $user = Auth::user();
@@ -41,6 +42,21 @@ class ListController extends Controller
             else return response(['message'=>'你没有权限'],403);
         }
         else return response(['message'=>'请检查你的输入信息'],403);
+        if ($request->input('bookseller', false)) {
+            if ($user->role->alias !== 'bookseller' || $user->role->alias !== 'root') {
+                if ($user->role->alias === 'root') {
+                    $order_user = User::find($request->input('user_id', -1));
+                    if ($order_user === null) abort (404);
+                }
+                else $order_user = $user;
+                $books = $order_user->book;
+                $orders = Order::find(-1);
+                foreach ($books as $key => $book) {
+                    $child_query = Order::where('book_id', $book->id);
+                    $orders->union($child_query);
+                }
+            }
+        }
         if ($request->input('step', null) !== null) $orders = $orders->where('step', $request->input('step'));
         $number = count($orders->get());
         $orders = $orders->take($request->input('limit', $number));
