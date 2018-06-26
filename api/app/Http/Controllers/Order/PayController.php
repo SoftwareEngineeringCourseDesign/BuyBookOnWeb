@@ -25,8 +25,8 @@ class PayController extends Controller
         $user = Auth::user();
         if($user === null) return response(['message'=>'您未登录'],401);
         if($user->id !== $order->user_id) return response(['message'=>'您没有权限'],403);
-        if($user->money - $order->price < 0) return response(['message'=>'您余额不足'],403);
-        $user->money = $user->money - $order->price;
+        if($user->money * 100 - $order->price < 0) return response(['message'=>'您余额不足'],403);
+        $user->money = $user->money - $order->price / 100.0;
         $user->save();
         $order->step = 2;
         $order->save();
