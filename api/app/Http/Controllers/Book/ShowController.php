@@ -36,7 +36,7 @@ class ShowController extends Controller
             else {
                 $books = Book::where('user_id', $request->input('user_id'))->latest();
                 if ($request->input('passed', null) !== null) $books = $books->where('passed', +$request->input('passed'));
-                if ($request->input('category_id', null) !== null) $books = $books->where('passed', +$request->input('category_id'));
+                if ($request->input('category_id', null) !== null) $books = $books->where('category_id', +$request->input('category_id'));
             }
         }
         else {
