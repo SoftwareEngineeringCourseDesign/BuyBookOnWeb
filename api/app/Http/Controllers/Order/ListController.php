@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Order;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,7 +50,7 @@ class ListController extends Controller
                     if ($order_user === null) abort (404);
                 }
                 else $order_user = $user;
-                $books = $order_user->book;
+                $books = $order_user->books;
                 $orders = Order::find(-1);
                 foreach ($books as $key => $book) {
                     $child_query = Order::where('book_id', $book->id);
