@@ -67,11 +67,11 @@ export default {
           subLink: [
             {
               name: '出版商管理',
-              link: 'javascript:void(0);'
+              link: '/bookseller'
             },
             {
               name: '后台管理',
-              link: 'javascript:void(0);'
+              link: '/admin'
             }
           ]
         },
@@ -98,9 +98,8 @@ export default {
   .Footer {
     text-align: center;
     background-color: #C0C0C0;
-    height: 200px;
+    height: 250px;
     width: 100%;
-    /*line-height: 100px;*/
     font-size: 150%;
     z-index: -1;
   }

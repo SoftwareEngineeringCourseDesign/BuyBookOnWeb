@@ -15,8 +15,12 @@ export default {
   },
   beforeMount: function () {
     this.$store.commit('SET_API_TOKEN', localStorage.token === undefined ? '' : JSON.parse(localStorage.token))
-    this.$store.commit('SET_AUTH_USER', localStorage.authUser === undefined ? {} : JSON.parse(localStorage.authUser))
-    this.$store.commit('SET_STATUS', localStorage.status === undefined ? false : JSON.parse(localStorage.status))
+    this.$store.commit('SET_AUTH_USER', localStorage.authUser === undefined ? '' : JSON.parse(localStorage.authUser))
+    console.log('-----------------------------\n' +
+      '若想申请成为bookseller\n或是想参与开发该网站\n' +
+      '请联系管理员\n' +
+      'GitHub: https://github.com/qiankaihua\n' +
+      '-----------------------------')
   },
   data () {
     return {

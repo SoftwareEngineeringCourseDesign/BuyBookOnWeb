@@ -1,38 +1,38 @@
 <template>
   <div id="login">
     <div style="width: 100%; height: 100px;"></div>
-    <i-rol>
+    <i-row>
       <i-col :xs="{span: 16, offset: 4}" :md="{span: 8, offset: 15}">
         <i-card>
           <i-form ref="loginValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" onsubmit="return false">
             <span>
                 <i-form-item v-if="flag" label="用户名" prop="name">
                   <i-input v-model="formValidate.name" placeholder="Enter your name">
-                <span slot="prepend">
-                  <i-icon :size="16" type="person"></i-icon>
-                </span>
-                  </i-input>
-                </i-form-item>
-                <i-form-item v-else label="邮箱" prop="mail">
-                  <i-input v-model="formValidate.mail" placeholder="Enter your e-mail">
-                <span slot="prepend">
-                  <i-icon :size="16" type="email"></i-icon>
-                </span>
+                    <span slot="prepend">
+                      <i-icon :size="16" type="person"></i-icon>
+                    </span>
+                      </i-input>
+                    </i-form-item>
+                    <i-form-item v-else label="邮箱" prop="mail">
+                      <i-input v-model="formValidate.mail" placeholder="Enter your e-mail">
+                    <span slot="prepend">
+                      <i-icon :size="16" type="email"></i-icon>
+                    </span>
                   </i-input>
                 </i-form-item>
             </span>
             <span>
                 <i-form-item label="密码" prop="password">
                   <i-input v-model="formValidate.password" placeholder="Enter your password" :type="showPassword ? 'text' : 'password'">
-                <span slot="prepend">
-                  <i-icon :size="16" type="locked"></i-icon>
-                </span>
-                    <span slot="append">
-                  <i-button style="padding: 3px 10px" @click="showPassword = !showPassword">
-                    <i-icon :size="18" style="color:#2D8CF0" type="eye" v-if="showPassword"></i-icon>
-                    <i-icon :size="18" type="eye" v-else></i-icon>
-                  </i-button>
-                </span>
+                    <span slot="prepend">
+                      <i-icon :size="16" type="locked"></i-icon>
+                    </span>
+                        <span slot="append">
+                      <i-button style="padding: 3px 10px" @click="showPassword = !showPassword">
+                        <i-icon :size="18" style="color:#2D8CF0" type="eye" v-if="showPassword"></i-icon>
+                        <i-icon :size="18" type="eye" v-else></i-icon>
+                      </i-button>
+                    </span>
                   </i-input>
                 </i-form-item>
             </span>
@@ -57,7 +57,7 @@
           </i-form>
         </i-card>
       </i-col>
-    </i-rol>
+    </i-row>
   </div>
 </template>
 
@@ -81,7 +81,7 @@ export default {
       ruleValidate: {
         name: [
           { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { pattern: /^[a-zA-Z][a-zA-Z0-9_]{5,19}$/, message: '用户名只能由6-20位的字母,数字,下划线组成', trigger: 'blur' },
+          { pattern: /^[a-zA-Z][a-zA-Z0-9_]{3,19}$/, message: '用户名只能由4-20位的字母,数字,下划线组成', trigger: 'blur' },
           { pattern: /^[a-zA-Z]/, message: '用户名只能由字母开头', trigger: 'blur' }
         ],
         mail: [
@@ -90,7 +90,7 @@ export default {
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { pattern: /^[\x21-\x7e]{6,20}$/, message: '密码长度必须在6到20位之间', trigger: 'blur' },
+          { pattern: /^[\x21-\x7e]{4,20}$/, message: '密码长度必须在4到20位之间', trigger: 'blur' },
           { pattern: /^[a-zA-Z]/, message: '密码必须由字母开头', trigger: 'blur' }
         ]
       }
@@ -99,14 +99,13 @@ export default {
   computed: {
   },
   beforeMount: function () {
-    this.$http.get('check', {params: {token: this.$store.state.auth.token}})
+    this.$http.get('user/' + this.$store.state.auth.authUser, {params: {token: this.$store.state.auth.token}})
       .then((response) => {
         this.$Notice.success({title: '登陆成功'})
-        this.$router.push({ name: 'Home' })
         this.$Loading.finish()
+        this.$router.back()
       })
       .catch((e) => {
-        console.log(e)
       })
     document.title = '登录' + window.title_suf
   },
@@ -122,7 +121,7 @@ export default {
           let formData = new FormData()
           if (this.flag) {
             formData.append('username', this.formValidate.name)
-          } else formData.append('email', this.formValidate.mail)
+          } else formData.append('username', this.formValidate.mail)
           let createHash = require('create-hash')
           let hash = createHash('sha1')
           hash.update(this.formValidate.password)
@@ -136,22 +135,14 @@ export default {
           }
           this.$http.post('auth/login', formData, config)
             .then(response => {
-              let auth = {
-                id: response.data.id,
-                nickname: response.data.nickname,
-                gender: response.data.gender,
-                avatar: response.data.avatar
-              }
               localStorage.clear()
               store.set('token', response.data.token)
-              store.set('authUser', auth)
-              store.set('status', true)
+              store.set('authUser', response.data.user_id)
               this.$store.commit('SET_API_TOKEN', response.data.token)
-              this.$store.commit('SET_AUTH_USER', auth)
-              this.$store.commit('SET_STATUS', true)
+              this.$store.commit('SET_AUTH_USER', response.data.user_id)
               this.$Loading.finish()
               this.$Notice.success({ title: '登录成功' })
-              this.$router.push({ name: 'Home' })
+              this.$router.push({ name: 'Index' })
             })
             .catch(e => {
               iView.LoadingBar.error()
@@ -165,20 +156,14 @@ export default {
                   else iView.Notice.error({title: '该用户名未注册'})
               }
               this.formValidate.password = ''
-              console.log(e)
             })
         }
       })
     },
-    ToHome () {
-      this.$Loading.start()
-      this.$Loading.finish()
-      this.$router.push({ name: 'Home' })
-    },
     ToRegister () {
       this.$Loading.start()
       this.$Loading.finish()
-      this.$router.push({ path: '/register' })
+      this.$router.push({ name: 'Register' })
     }
   }
 }
@@ -187,7 +172,7 @@ export default {
 <style scoped>
   #login {
     height: 100vh;
-    background: #FFEFDB;
+    /*background: #FFEFDB;*/
     background-image: url("../../../../../title.jpg");
     background-repeat: no-repeat;
   }

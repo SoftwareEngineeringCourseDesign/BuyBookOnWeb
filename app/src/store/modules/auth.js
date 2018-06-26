@@ -1,7 +1,6 @@
 const state = {
   authUser: {},
-  token: '',
-  status: false
+  token: ''
 }
 
 const getters = {
@@ -13,9 +12,6 @@ const mutations = {
   },
   SET_API_TOKEN (state, payload) {
     state.token = payload
-  },
-  SET_STATUS (state, payload) {
-    state.status = payload
   }
 }
 
