@@ -54,7 +54,8 @@ class ListController extends Controller
                 $orders = Order::find(-1);
                 foreach ($books as $key => $book) {
                     $child_query = Order::where('book_id', $book->id);
-                    $orders->union($child_query);
+                    if ($orders !== null) $orders->union($child_query);
+                    else $orders = $child_query;
                 }
             }
         }
